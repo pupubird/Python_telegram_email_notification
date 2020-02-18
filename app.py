@@ -112,8 +112,14 @@ def update_config():
             updates = requests.get(
                 f'https://api.telegram.org/bot{API_KEY}/getUpdates')
 
-            CHAT_ID = json.loads(updates.content)['result'][
-                0]['channel_post']['chat']['id']
+            results = json.loads(updates.content)['result']
+            for result in results:
+                if result.get('channel_post', False):
+                    CHAT_ID = result['channel_post']['chat']['id']
+                    break
+            else:
+                raise KeyError(
+                    "Not found channel_post, please be sure the bot is in a channel")
 
     except FileNotFoundError:
         with open('config.json', 'w') as f:
