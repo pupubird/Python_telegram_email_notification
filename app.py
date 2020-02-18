@@ -10,7 +10,7 @@ MAX_DEPTH = 10
 
 mail = imaplib.IMAP4_SSL(SERVER)
 mail.login(EMAIL, PASSWORD)
-mail.select('inbox')
+mail.select('[Gmail]/Important')
 
 status, data = mail.search(None, 'ALL')
 
