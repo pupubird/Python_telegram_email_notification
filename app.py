@@ -122,7 +122,8 @@ def update_config():
                 "EMAIL": input("Email: "),
                 "PASSWORD": getpass.getpass("Password: "),
                 "SERVER": "imap.gmail.com",
-                "MAX_DEPTH": int(input("Maximum Depth of emails (Recommend 10): "))
+                "MAX_DEPTH": int(input("Maximum Depth of emails (Recommend 10): ")),
+                "LAST_ID": 0
             }, indent=2)
             f.write(json_payload)
         update_config()
@@ -145,5 +146,4 @@ def set_config(last_id):
 
 if __name__ == "__main__":
     mail = login()
-    timer = threading.Timer(INTERVAL, main, [mail])
-    timer.start()
+    main(mail)
