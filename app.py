@@ -15,6 +15,7 @@ API_KEY = ""
 CHAT_ID = ""
 LAST_ID = 0
 INTERVAL = 3600
+CHANNEL_NAME = ""
 
 
 def login():
@@ -89,7 +90,7 @@ def send_message(mail_contents):
 
 
 def update_config():
-    global EMAIL, PASSWORD, SERVER, MAX_DEPTH, CHAT_ID, API_KEY, LAST_ID
+    global EMAIL, PASSWORD, SERVER, MAX_DEPTH, CHAT_ID, API_KEY, LAST_ID, CHANNEL_NAME`
     try:
         with open('config.json', 'r') as f:
             strings = ""
@@ -99,6 +100,7 @@ def update_config():
             EMAIL = json_payload['EMAIL']
             PASSWORD = json_payload['PASSWORD']
             SERVER = json_payload['SERVER']
+            CHANNEL_NAME = json_payload['CHANNEL_NAME']
 
             # Only apply when there is no last id
             if int(json_payload['LAST_ID']) == 0:
@@ -118,8 +120,13 @@ def update_config():
                     CHAT_ID = result['channel_post']['chat']['id']
                     break
             else:
-                raise KeyError(
-                    "Not found channel_post, please be sure the bot is in a channel")
+                data = {
+                    "chat_id": json_payload["CHANNEL_NAME"],
+                    "text": "A test message from program",
+                    "parse_mode": "Markdown"
+                }
+                result = requests.post(
+                    f'https://api.telegram.org/bot{API_KEY}/sendMessage', data=data, json=data)
 
     except FileNotFoundError:
         with open('config.json', 'w') as f:
@@ -129,14 +136,15 @@ def update_config():
                 "PASSWORD": getpass.getpass("Password: "),
                 "SERVER": "imap.gmail.com",
                 "MAX_DEPTH": int(input("Maximum Depth of emails (Recommend 10): ")),
-                "LAST_ID": 0
+                "LAST_ID": 0,
+                "CHANNEL_NAME": input("Input channel name (You may change the channel to private after the test message was sent): ")
             }, indent=2)
             f.write(json_payload)
         update_config()
 
 
 def set_config(last_id):
-    global EMAIL, PASSWORD, SERVER, MAX_DEPTH, API_KEY, CHAT_ID
+    global EMAIL, PASSWORD, SERVER, MAX_DEPTH, API_KEY, CHAT_ID, CHANNEL_NAME
     with open('config.json', 'w') as f:
         json_payload = json.dumps({
             "API_KEY": API_KEY,
@@ -145,7 +153,8 @@ def set_config(last_id):
             "SERVER": SERVER,
             "MAX_DEPTH": int(MAX_DEPTH/100000),
             "CHAT_ID": CHAT_ID,
-            "LAST_ID": last_id
+            "LAST_ID": last_id,
+            "CHANNEL_NAME": CHANNEL_NAME
         }, indent=2)
         f.write(json_payload)
 
