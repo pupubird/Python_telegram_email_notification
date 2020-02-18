@@ -73,7 +73,7 @@ def main(mail):
     set_config(len(mail_ids))
     print("All latest emails notification sent.") if LAST_ID != len(
         mail_ids) else print("No new emails")
-
+    print("Next check in", INTERVAL, "seconds")
     timer = threading.Timer(INTERVAL, main, [mail])
     timer.start()
 
