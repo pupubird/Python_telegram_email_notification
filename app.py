@@ -90,7 +90,7 @@ def send_message(mail_contents):
 
 
 def update_config():
-    global EMAIL, PASSWORD, SERVER, MAX_DEPTH, CHAT_ID, API_KEY, LAST_ID, CHANNEL_NAME`
+    global EMAIL, PASSWORD, SERVER, MAX_DEPTH, CHAT_ID, API_KEY, LAST_ID, CHANNEL_NAME
     try:
         with open('config.json', 'r') as f:
             strings = ""
