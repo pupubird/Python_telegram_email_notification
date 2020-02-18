@@ -20,14 +20,15 @@ for block in data:
     mail_ids += block.split()
 
 LAST_ID = None
-with open('last_id.txt', 'r') as f:
-    try:
-        LAST_ID = int(f.read())
-    except ValueError:
-        pass
-
-with open('last_id.txt', 'w') as f:
-    f.write(str(len(mail_ids)))
+try:
+    with open('last_id.txt', 'r+') as f:
+        try:
+            LAST_ID = int(f.read())
+        except ValueError:
+            pass
+except FileNotFoundError:
+    with open('last_id.txt', 'w+') as f:
+        f.write(str(len(mail_ids)))
 
 for i in range(len(mail_ids), 1, -1):
     if abs(len(mail_ids) - i) >= MAX_DEPTH or i == LAST_ID:
