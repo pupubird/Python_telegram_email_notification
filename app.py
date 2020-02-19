@@ -15,7 +15,7 @@ MAX_DEPTH = 0
 API_KEY = ""
 CHAT_ID = ""
 LAST_ID = 0
-INTERVAL = 5 # 15 Minutes
+INTERVAL = 900 # 15 Minutes
 CHANNEL_NAME = ""
 
 
