@@ -3,6 +3,7 @@ import imaplib
 import getpass
 import json
 import requests
+import re
 import threading
 from email.header import Header, decode_header, make_header
 
@@ -25,13 +26,13 @@ def login():
     print("Logging in with", EMAIL)
     mail.login(EMAIL, PASSWORD)
     print("Logged in")
+    mail.select('[Gmail]/Important')
     return mail
 
 
 def main(mail):
     global EMAIL, PASSWORD, SERVER, MAX_DEPTH, LAST_ID, INTERVAL
     update_config()
-    mail.select('[Gmail]/Important')
 
     status, data = mail.search(None, 'ALL')
 
@@ -52,11 +53,12 @@ def main(mail):
             if isinstance(response_part, tuple):
                 message = email.message_from_bytes(response_part[1])
                 mail_from = message['from']
+                mail_from = re.sub('<.*>', mail_from).replace("\"", "")
                 mail_subject = message['subject']
                 mail_subject = make_header(decode_header(mail_subject))
 
-                email_from = f"Email From: `{mail_from}`"
-                subject = f"Subject:\n\t> \t\t*{mail_subject}*"
+                email_from = f"📧 From: `{mail_from}`"
+                subject = f"_Subject_:\n\t> \t\t*{mail_subject}*"
                 content = f"{email_from}\n{subject}\n\n"
 
                 for j in range(len(messages)):

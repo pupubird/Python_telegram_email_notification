@@ -1,4 +1,4 @@
-# Python Read Emails
+# Python Telegram Email Notification
 
 ## Getting started
 
