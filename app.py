@@ -15,7 +15,7 @@ MAX_DEPTH = 0
 API_KEY = ""
 CHAT_ID = ""
 LAST_ID = 0
-INTERVAL = 3600
+INTERVAL = 5
 CHANNEL_NAME = ""
 
 
@@ -34,7 +34,7 @@ def main(mail):
     global EMAIL, PASSWORD, SERVER, MAX_DEPTH, LAST_ID, INTERVAL
     update_config()
 
-    status, data = mail.search(None, 'ALL')
+    _, data = mail.search(None, 'ALL')
 
     mail_ids = []
 
@@ -47,13 +47,13 @@ def main(mail):
             break
         i = bytes(str(i), encoding='utf-8')
 
-        status, data = mail.fetch(i, '(RFC822)')
+        _, data = mail.fetch(i, '(RFC822)')
         for response_part in data:
 
             if isinstance(response_part, tuple):
                 message = email.message_from_bytes(response_part[1])
                 mail_from = message['from']
-                mail_from = re.sub('<.*>', mail_from).replace("\"", "")
+                mail_from = re.sub('<.*>', mail_from,mail_from).replace("\"", "")
                 mail_subject = message['subject']
                 mail_subject = make_header(decode_header(mail_subject))
 
