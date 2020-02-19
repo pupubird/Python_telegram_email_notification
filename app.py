@@ -4,7 +4,7 @@ import getpass
 import json
 import requests
 import re
-import threading
+import time
 from email.header import Header, decode_header, make_header
 
 
@@ -15,7 +15,7 @@ MAX_DEPTH = 0
 API_KEY = ""
 CHAT_ID = ""
 LAST_ID = 0
-INTERVAL = 5
+INTERVAL = 5 # 15 Minutes
 CHANNEL_NAME = ""
 
 
@@ -30,7 +30,8 @@ def login():
     return mail
 
 
-def main(mail):
+def main():
+    mail = login()
     global EMAIL, PASSWORD, SERVER, MAX_DEPTH, LAST_ID, INTERVAL
     update_config()
 
@@ -43,7 +44,7 @@ def main(mail):
 
     messages = [""]
     for i in range(len(mail_ids), 1, -1):
-        if abs(len(mail_ids) - i) >= MAX_DEPTH or i == LAST_ID:
+        if abs(len(mail_ids) - i) >= MAX_DEPTH or i == LAST_ID or LAST_ID > len(mail_ids):
             break
         i = bytes(str(i), encoding='utf-8')
 
@@ -76,8 +77,9 @@ def main(mail):
     print("All latest emails notification sent.") if LAST_ID != len(
         mail_ids) else print("No new emails")
     print("Next check in", INTERVAL, "seconds")
-    timer = threading.Timer(INTERVAL, main, [mail])
-    timer.start()
+    time.sleep(INTERVAL)
+    mail.logout()
+    main()
 
 
 def send_message(mail_contents):
@@ -87,7 +89,7 @@ def send_message(mail_contents):
         "text": mail_contents,
         "parse_mode": "Markdown"
     }
-    result = requests.post(
+    _ = requests.post(
         f'https://api.telegram.org/bot{API_KEY}/sendMessage', data=data, json=data)
 
 
@@ -162,5 +164,4 @@ def set_config(last_id):
 
 
 if __name__ == "__main__":
-    mail = login()
-    main(mail)
+    main()
