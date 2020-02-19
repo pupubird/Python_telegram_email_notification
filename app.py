@@ -78,7 +78,6 @@ def main():
         mail_ids) else print("No new emails")
     print("Next check in", INTERVAL, "seconds")
     time.sleep(INTERVAL)
-    mail.logout()
     main()
 
 
