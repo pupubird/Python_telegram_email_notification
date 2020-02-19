@@ -15,7 +15,7 @@ MAX_DEPTH = 0
 API_KEY = ""
 CHAT_ID = ""
 LAST_ID = 0
-INTERVAL = 900 # 15 Minutes
+INTERVAL = 900  # 15 Minutes
 CHANNEL_NAME = ""
 
 
@@ -54,7 +54,7 @@ def main():
             if isinstance(response_part, tuple):
                 message = email.message_from_bytes(response_part[1])
                 mail_from = message['from']
-                mail_from = re.sub('<.*>', mail_from,mail_from).replace("\"", "")
+                mail_from = re.sub('<.*>', "", mail_from).replace("\"", "")
                 mail_subject = message['subject']
                 mail_subject = make_header(decode_header(mail_subject))
 
