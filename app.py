@@ -84,13 +84,16 @@ def main():
 
 def send_message(mail_contents):
     global API_KEY, CHAT_ID
+    if not CHAT_ID:
+        CHAT_ID = CHANNEL_NAME
     data = {
         "chat_id": CHAT_ID,
         "text": mail_contents,
         "parse_mode": "Markdown"
     }
-    _ = requests.post(
-        f'https://api.telegram.org/bot{API_KEY}/sendMessage', data=data, json=data)
+    response = requests.post(
+        f'https://api.telegram.org/bot{API_KEY}/sendMessage?chat_id=@{CHANNEL_NAME}', data=data, json=data)
+    print(response)
 
 
 def update_config():
@@ -123,14 +126,7 @@ def update_config():
                 if result.get('channel_post', False):
                     CHAT_ID = result['channel_post']['chat']['id']
                     break
-            else:
-                data = {
-                    "chat_id": json_payload["CHANNEL_NAME"],
-                    "text": "A test message from program",
-                    "parse_mode": "Markdown"
-                }
-                result = requests.post(
-                    f'https://api.telegram.org/bot{API_KEY}/sendMessage', data=data, json=data)
+            
 
     except FileNotFoundError:
         with open('config.json', 'w') as f:
