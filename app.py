@@ -5,6 +5,7 @@ import json
 import requests
 import re
 import time
+import os
 from email.header import Header, decode_header, make_header
 
 
@@ -15,7 +16,7 @@ MAX_DEPTH = 0
 API_KEY = ""
 CHAT_ID = ""
 LAST_ID = 0
-INTERVAL = 900  # 15 Minutes
+INTERVAL = 60  # 1 Minute
 CHANNEL_NAME = ""
 
 
@@ -78,7 +79,7 @@ def main():
         mail_ids) else print("No new emails")
     print("Next check in", INTERVAL, "seconds")
     time.sleep(INTERVAL)
-    main()
+    return True
 
 
 def send_message(mail_contents):
@@ -163,4 +164,5 @@ def set_config(last_id):
 
 
 if __name__ == "__main__":
-    main()
+    while True:
+        main()
