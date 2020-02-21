@@ -53,6 +53,11 @@ def main():
             if isinstance(response_part, tuple):
                 message = email.message_from_bytes(response_part[1])
                 mail_from = message['from']
+
+                # validate if the mail is in blacklist
+                if is_black_listed(mail_from):
+                    continue
+
                 mail_from = re.sub('<.*>', "", mail_from).replace("\"", "")
                 mail_subject = message['subject']
                 mail_subject = make_header(decode_header(mail_subject))
@@ -77,7 +82,12 @@ def main():
         mail_ids) else print("No new emails")
     return True
 
-
+def is_black_listed(mail_from):
+    with open("blacklist.txt",'r') as f:
+        blacklists = f.readlines()
+        if mail_from in blacklists:
+            return True
+    return False
 def send_message(mail_contents):
     global API_KEY, CHAT_ID
     if not CHAT_ID:
@@ -87,7 +97,7 @@ def send_message(mail_contents):
         "text": mail_contents,
         "parse_mode": "Markdown"
     }
-    response = requests.post(
+    _ = requests.post(
         f'https://api.telegram.org/bot{API_KEY}/sendMessage?chat_id=@{CHANNEL_NAME}', data=data, json=data)
 
 
@@ -153,7 +163,5 @@ def set_config(last_id):
         }, indent=2)
         f.write(json_payload)
 
-
 if __name__ == "__main__":
-    while main():
-        print("________")
+    main()

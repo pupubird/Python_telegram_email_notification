@@ -1,7 +1,7 @@
 import os
 import time
 import check_emails
-INTERVAL = 60  # 1 Minute
+INTERVAL = 300  # 5 Minutes
 while True:
       
     # for windows 
