@@ -15,7 +15,7 @@ while True:
     try:
         check_emails.main()
     except Exception:
-        check_emails.main() 
+        pass
     print("Next check in", INTERVAL, "seconds")
     time.sleep(INTERVAL)
 
