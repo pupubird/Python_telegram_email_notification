@@ -12,7 +12,10 @@ while True:
     else: 
         _ = os.system('clear') 
 
-    check_emails.main()
+    try:
+        check_emails.main()
+    except Exception:
+        check_emails.main() 
     print("Next check in", INTERVAL, "seconds")
     time.sleep(INTERVAL)
 

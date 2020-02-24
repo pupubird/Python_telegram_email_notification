@@ -85,8 +85,9 @@ def main():
 def is_black_listed(mail_from):
     with open("blacklist.txt",'r') as f:
         blacklists = f.readlines()
-        if mail_from in blacklists:
-            return True
+        for blacklist in blacklists:
+            if blacklist in mail_from:
+                return True
     return False
 def send_message(mail_contents):
     global API_KEY, CHAT_ID
