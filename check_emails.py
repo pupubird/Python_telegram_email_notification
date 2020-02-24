@@ -86,6 +86,7 @@ def is_black_listed(mail_from):
     with open("blacklist.txt",'r') as f:
         blacklists = f.readlines()
         for blacklist in blacklists:
+            blacklist = blacklist.strip()
             if blacklist in mail_from:
                 return True
     return False
