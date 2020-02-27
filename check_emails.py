@@ -34,7 +34,7 @@ def main():
     global EMAIL, PASSWORD, SERVER, MAX_DEPTH, LAST_ID, INTERVAL
     update_config()
 
-    _, data = mail.search(None, 'ALL')
+    _, data = mail.search(None,'All')
 
     mail_ids = []
 
@@ -42,6 +42,7 @@ def main():
         mail_ids += block.split()
 
     messages = [""]
+    subject_arr = [""]
     for i in range(len(mail_ids), 1, -1):
         if abs(len(mail_ids) - i) >= MAX_DEPTH or i == LAST_ID or LAST_ID > len(mail_ids):
             break
@@ -62,6 +63,12 @@ def main():
                 mail_subject = message['subject']
                 mail_subject = make_header(decode_header(mail_subject))
 
+                # avoid duplicate subject
+                if mail_subject in subject_arr:
+                    continue
+
+                subject_arr.append(mail_subject)
+
                 email_from = f"📧 From: `{mail_from}`"
                 subject = f"_Subject_:\n\t> \t\t*{mail_subject}*"
                 content = f"{email_from}\n{subject}\n\n"
@@ -72,7 +79,7 @@ def main():
                         break
                 else:
                     print("Message too large, send in a new message")
-                    messages.append(content)
+                    messages.append((email_from,content))
                 print("Appended", email_from)
 
     for message in messages:
