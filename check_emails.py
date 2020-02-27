@@ -79,7 +79,7 @@ def main():
                         break
                 else:
                     print("Message too large, send in a new message")
-                    messages.append((email_from,content))
+                    messages.append(content)
                 print("Appended", email_from)
 
     for message in messages:
